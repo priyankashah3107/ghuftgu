@@ -11,10 +11,26 @@ const RegisterPage = () => {
 
   const handleSubmit = async(e) => {
      e.preventDefault()
-     console.log("signUp to the User")
-    const result =  await firebase.createUserEmailPass(email, password)
-    console.log("Registration Successfully", result)
-     alert("successfully registred")
+     if(!name || !email || !password) {
+      alert("Please Fill all the feild")
+     }
+
+
+
+    try {
+      const result = await createUserEmailPass(email, password);
+      console.log('Registration successful:', result);
+      alert('Successfully registered!');
+      
+    } catch (error) {
+      alert('Registration failed. Please try again.');
+        console.log("Error occur during Registration", error)
+    }
+
+    //  console.log("signUp to the User")
+    // const result =  await firebase.createUserEmailPass(email, password)
+    // console.log("Registration Successfully", result)
+    //  alert("successfully registred")
 
   }
 
