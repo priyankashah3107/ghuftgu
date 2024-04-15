@@ -10,27 +10,6 @@ const auth = getAuth(app)
 export const useFirbase = () =>  useContext(FireBaseContext);
 
 
-// const createUserEmailPass = (email, password) => {
-//   return createUserWithEmailAndPassword(auth, email, password)
-// }
-
-// // SingIn
-// const SignWithEmailPass = (email, password) => {
-//   return signInWithEmailAndPassword(auth,email, password)
-// }
-
-
-
-const FirebaseAuth = ({children}) => {
-
-  const [user, setUser] = useState('')
-  useEffect(() =>  {
-       onAuthStateChanged(auth, user => {
-          if(user) setUser(user)
-          else setUser(null)
-       })
-  }, [] )
-  
 const createUserEmailPass = (email, password) => {
   return createUserWithEmailAndPassword(auth, email, password)
 }
@@ -41,11 +20,14 @@ const SignWithEmailPass = (email, password) => {
 }
 
 
-const isLoggedIn = user ? true : false
+
+const FirebaseAuth = ({children}) => {
+
+
 
 
   return (
-    <FireBaseContext.Provider value={{createUserEmailPass, SignWithEmailPass, isLoggedIn}}>
+    <FireBaseContext.Provider value={{createUserEmailPass, SignWithEmailPass}}>
       {children}
       
     </FireBaseContext.Provider>
