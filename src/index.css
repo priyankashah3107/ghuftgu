@@ -6,7 +6,9 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+  "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+
 }
 
 body{
@@ -25,6 +27,7 @@ body{
   border-radius: 10px;
   align-items: center;
   justify-content: center;
-  margin-top: 4%;
+  margin-top: 0%;
   left: 10%;
+  justify-content: center;
 }
