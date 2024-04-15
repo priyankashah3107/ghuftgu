@@ -13,6 +13,7 @@ const RegisterPage = () => {
      e.preventDefault()
      if(!name || !email || !password) {
       alert("Please Fill all the feild")
+      return
      }
 
 
