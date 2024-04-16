@@ -8,10 +8,11 @@ const UserChats = () => {
   return (
     <>
     
-     <div className='flex '>
+     <div className='flex justify-between  '>
       <List />
-      <Detail />
       <Chat />
+      <Detail />
+     
       
     </div>  
     </>

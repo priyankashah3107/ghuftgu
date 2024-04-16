@@ -33,8 +33,8 @@ body{
   left: auto; 
   right: auto;
   padding-top: 20px;
-  justify-content: center;
-
-  /* display: flex; */
+  /* justify-content: center; */
+  display: flex;
+  justify-content: space-between; 
   
 }

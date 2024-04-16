@@ -4,3 +4,13 @@
  flex-direction: column;
  
 }
+
+.item {
+  background-color: inherit; 
+  transition: background-color 0.2s ease-in-out; 
+  cursor: pointer; 
+}
+
+.item:hover {
+  background-color: rgb(82, 82, 241); 
+}
