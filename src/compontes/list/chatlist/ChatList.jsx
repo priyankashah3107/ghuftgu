@@ -8,7 +8,7 @@ const ChatList = () => {
       <div className="search flex items-center justify-center p-[20px] gap-[20px]">
         <div className="searchBar flex-1 flex justify-center items-center  rounded-md gap-2">
           <img src="/search.svg" alt="search" className='size-6 ml-2' />
-          <input type="text" placeholder='Search.......' className='text-black rounded-md bg-transparent 
+          <input type="text" placeholder='Search.......' className='text-black rounded-md bg-transparent p-2
            outline-none bg-white flex-1 ' />
         </div>
         <img src={addMode ? "/minus.svg" : "/plus.svg"} alt="plus" className='size-6 cursor-pointer bg-slate-200 rounded-md 
