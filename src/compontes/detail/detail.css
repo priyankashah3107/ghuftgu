@@ -21,7 +21,7 @@
     display: flex;
     flex-direction: column;
     padding: 10px;
-    margin-right: 50px;
+    /* margin-right: 50px; */
     scroll-behavior: smooth;
     
     .option{
