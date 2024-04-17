@@ -1,3 +1,71 @@
 .detail{
   flex: 1;
+  overflow: scroll;
+  .user{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    border-bottom: 1px solid #a8a8a8;
+
+    img{
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+  }
+
+  .info{
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    margin-right: 50px;
+    scroll-behavior: smooth;
+    
+    .option{
+      display: flex;
+      flex-direction: column;
+      padding: 10px;
+
+      .title{
+        display: flex;
+        flex-direction: row;
+        justify-content:  space-between;
+
+        img{
+          width: 20px;
+          height: 20px;
+        }
+      }
+
+      .photos {
+        .photoItems {
+          padding: 5px;
+          margin-top: 5px;
+          img{
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* .photos{
+  display: flex;
+  flex-direction: column;
+  .photoItems{
+    display: flex;
+    flex-direction: row; 
+    justify-content: space-between;
+  }
+} */
+
+.detail::-webkit-scrollbar{
+   width: 6px;
 }
