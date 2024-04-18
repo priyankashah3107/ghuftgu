@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useFirbase } from '../context/FirebaseAuth'
+// import { createUserWithEmailAndPassword } from 'firebase/auth';
+// import { app } from '../../firebase';
 const RegisterPage = () => {
   
   const [email, setEmail] = useState('')
@@ -35,7 +37,8 @@ const RegisterPage = () => {
 
 
     try {
-      const result = await createUserEmailPass(email, password);
+      const result = await firebase.createUserEmailPass(email, password);
+      // const result = await createUserWithEmailAndPassword(firebase.auth, email, password);
       console.log('Registration successful:', result);
       alert('Successfully registered!');
       

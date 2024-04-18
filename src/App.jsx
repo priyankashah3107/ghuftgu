@@ -7,7 +7,7 @@ import UserChats from './compontes/UserChats'
 import { useNavigate } from 'react-router-dom'
 import Notification from './compontes/notification/Notification'
 const App = () => {
-  const user = false;
+  const user = true;
   const navigate = useNavigate()
 
   // useEffect(() => {
