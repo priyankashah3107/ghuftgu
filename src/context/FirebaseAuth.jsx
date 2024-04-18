@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { app } from "../../firebase";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged  } from "firebase/auth"
+import { doc, setDoc } from "firebase/firestore"; 
+import { db } from "../../firebase";
 import { set } from "firebase/database";
 
 const FireBaseContext = createContext(null)
@@ -10,8 +12,10 @@ const auth = getAuth(app)
 export const useFirbase = () =>  useContext(FireBaseContext);
 
 
-const createUserEmailPass = (email, password) => {
-  return createUserWithEmailAndPassword(auth, email, password)
+const createUserEmailPass = async(email, password, username) => {
+   createUserWithEmailAndPassword(auth, email, password, username)
+  
+  
 }
 
 // SingIn

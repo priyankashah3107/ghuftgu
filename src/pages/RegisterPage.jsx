@@ -1,13 +1,19 @@
 import React, { useState } from 'react'
 import { useFirbase } from '../context/FirebaseAuth'
+import { doc, setDoc } from "firebase/firestore"; 
+import { toast } from 'react-toastify';
+import { db } from '../../firebase';
 // import { createUserWithEmailAndPassword } from 'firebase/auth';
 // import { app } from '../../firebase';
 const RegisterPage = () => {
   
   const [email, setEmail] = useState('')
   const[password, setPassword] = useState('')
-  const [name, setName] = useState('')
-  
+  const [username, setuserName] = useState('')
+   
+  // console.log(username)
+
+
   const[avatar, setAvatar] = useState({
      file: null,
      url: ""
@@ -29,7 +35,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async(e) => {
      e.preventDefault()
-     if(!name || !email || !password) {
+     if(!username || !email || !password) {
       alert("Please Fill all the feild")
       return
      }
@@ -37,9 +43,24 @@ const RegisterPage = () => {
 
 
     try {
-      const result = await firebase.createUserEmailPass(email, password);
+      const result = await firebase.createUserEmailPass(email, password, username);
       // const result = await createUserWithEmailAndPassword(firebase.auth, email, password);
       console.log('Registration successful:', result);
+      
+      // await setDoc(doc(db, "users", result.user.uid), {
+      //   username,
+      //   email,
+      //   id: result.user.uid,
+      //   blocked: []
+        
+      // });
+       
+      // await setDoc(doc(db, "userchats", result.user.uid), {
+      //   chats: [],
+        
+      // });
+       
+      toast.success("Account Created! Now you can login 😉")
       alert('Successfully registered!');
       
     } catch (error) {
@@ -71,12 +92,12 @@ const RegisterPage = () => {
       </div>
      <div className="flex flex-col gap-8 mt-10">
 
-     <input type="text" placeholder="Username" className="input input-bordered w-full max-w-xs"
-     value={name} onChange={(e) => setName(e.target.value)} />
+     <input type="text" name='username' placeholder="Username" className="input input-bordered w-full max-w-xs"
+     value={username} onChange={(e) => setuserName(e.target.value)} />
 
-     <input type="email" placeholder="Enter Email" className="input input-bordered w-full max-w-xs" 
+     <input type="email" name='email' placeholder="Enter Email" className="input input-bordered w-full max-w-xs" 
      value={email} onChange={(e) => setEmail(e.target.value)}/>
-     <input type="password" placeholder="Enter password" className="input input-bordered w-full max-w-xs"
+     <input type="password" name='password' placeholder="Enter password" className="input input-bordered w-full max-w-xs"
       value={password}
       onChange={(e) => setPassword(e.target.value)}
      />
