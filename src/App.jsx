@@ -7,14 +7,14 @@ import UserChats from './compontes/UserChats'
 import { useNavigate } from 'react-router-dom'
 import Notification from './compontes/notification/Notification'
 const App = () => {
-  const user = true;
+  const user = false;
   const navigate = useNavigate()
 
-  useEffect(() => {
-    if (user) {
-      navigate('/userchats');
-    }
-  }, [user, navigate]);
+  // useEffect(() => {
+  //   if (user) {
+  //     navigate('/userchats');
+  //   }
+  // }, [user, navigate]);
 
   return (
 
@@ -32,7 +32,7 @@ const App = () => {
       <Route path={'/signin'} element={<LoginPage />} />
       <Route  path={'/signup'} element={<RegisterPage />} />
       
-      <Route  path='/userchats' element={<UserChats />}/>
+      {/* <Route  path='/userchats' element={<UserChats />}/> */}
 
      </Routes>
      
