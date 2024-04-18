@@ -5,15 +5,16 @@ import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import UserChats from './compontes/UserChats'
 import { useNavigate } from 'react-router-dom'
+import Notification from './compontes/notification/Notification'
 const App = () => {
-  const user = false;
+  const user = true;
   const navigate = useNavigate()
 
-  // useEffect(() => {
-  //   if(user) {
-  //     navigate('/userchats')
-  //   }
-  // }, [user, navigate]);
+  useEffect(() => {
+    if (user) {
+      navigate('/userchats');
+    }
+  }, [user, navigate]);
 
   return (
 
@@ -33,7 +34,8 @@ const App = () => {
       <Route  path='/userchats' element={<UserChats />}/>
 
      </Routes>
-
+     
+     <Notification />
      </div> 
     </>
     
