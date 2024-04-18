@@ -33,6 +33,7 @@ const Detail = () => {
             <span>Shared photos</span>
             <img src="/arrowdown.svg" alt="" />
           </div>
+          
            <div className="photos flex flex-row  justify-between text-center items-center">
              <img src="nexflix.png" alt="" />
              <span>photo_2024.png</span>

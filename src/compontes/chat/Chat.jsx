@@ -1,11 +1,19 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react';
 
 const Chat = () => {
   const[text, setText] = useState('')
   const[open , setOpen] = useState(false)
-  
+  const endRef = useRef(null); 
+  useEffect(() => {
+   
+    if (endRef.current) {
+      endRef.current.scrollIntoView({ behavior: "smooth" });
+    } else {
+      console.warn("endRef.current is not yet available or is not a DOM element");
+    }
+  }, []);
   const handleEmoji = (e) => {
     // console.log(e)
     setText((prev) => prev + e.emoji)
@@ -75,12 +83,11 @@ const Chat = () => {
             <span>1 min ago</span>
           </div>
         </div> 
-
+ 
+       
+       <div ref={endRef}></div>
 
       </div>
-
-
-
 
       <div className="bottom">
 

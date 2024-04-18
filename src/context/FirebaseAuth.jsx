@@ -19,6 +19,14 @@ const SignWithEmailPass = (email, password) => {
   return signInWithEmailAndPassword(auth,email, password)
 }
 
+// useEffect(() => {
+//   const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+//     setUser(currentUser);
+//   });
+
+//   return () => unsubscribe();
+// }, []);
+
 
 
 const FirebaseAuth = ({children}) => {

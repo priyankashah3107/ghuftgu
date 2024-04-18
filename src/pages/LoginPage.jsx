@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
 import { useFirbase } from '../context/FirebaseAuth'
+import { redirect, useNavigate} from 'react-router-dom'
 
 const LoginPage = () => {
   const firebase = useFirbase()
   console.log(firebase)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  
+  const navigate = useNavigate()
   const handleSubmit = async(ev) => {
        ev.preventDefault()
 
@@ -19,6 +20,7 @@ const LoginPage = () => {
         const res = await firebase.SignWithEmailPass(email, password)
         console.log("Successfully Logged In:", res);
         alert("Welcome back!");
+        // navigate('/userchats')
 
         
        }  catch (error) {
