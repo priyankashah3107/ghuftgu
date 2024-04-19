@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { db } from '../../firebase';
 import { app } from '../../firebase';
 import { useFirbase } from '../context/FirebaseAuth';
+import upload from '../../upload';
 const auth = getAuth(app);
 
 const RegisterPage = () => {
@@ -45,11 +46,14 @@ const RegisterPage = () => {
       // );
       const result = await firebase.createUserEmailPass(email, password, name);
       // const result = await createUserEmailPass(email, password);
+
+      const imgUrl = await upload(avatar.file)
       console.log('Registration successful:', result);
       alert('Successfully registered!');
       await setDoc(doc(db, 'users', result.user.uid), {
         name,
         email,
+        avatar: imgUrl,
         id: result.user.uid,
         blocked: [],
       });
@@ -57,6 +61,7 @@ const RegisterPage = () => {
       await setDoc(doc(db, 'userchats', result.user.uid), {
         chats: [],
       });
+      toast.success("Successfully Registered 😊")
     } catch (error) {
       alert('Registration failed. Please try again.');
       console.log('Error occur during Registration', error);
