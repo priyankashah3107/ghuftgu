@@ -20,7 +20,7 @@ const LoginPage = () => {
 
        try {
         const res = await firebase.SignWithEmailPass(email, password)
-        console.log("Successfully Logged In:", res);
+        // console.log("Successfully Logged In:", res);
         alert("Welcome back!");
         // navigate('/userchats')
 
