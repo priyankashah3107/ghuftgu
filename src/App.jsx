@@ -8,9 +8,13 @@ import { useNavigate } from 'react-router-dom'
 import Notification from './compontes/notification/Notification'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
 import { app } from '../firebase'
+import { useUserStore } from '../userStore'
+import Chat from './compontes/chat/Chat'
+import Detail from './compontes/detail/Detail'
 const auth = getAuth(app)
 const App = () => {
-  const user = false;
+  // const user = true;
+  // const user = false;
   const navigate = useNavigate()
 
   // useEffect(() => {
@@ -21,9 +25,14 @@ const App = () => {
 
 // React firebase to stroe user after user authentication
 
+// stateManagement with zudstand
+const {currentUser, isLoding, fetchUserInfo} = useUserStore()
+
   useEffect(() => {
     const authCh = onAuthStateChanged(auth, (user) => {
-      console.log(user)
+
+      // console.log(user.uid)
+      fetchUserInfo(user?.uid)
     }, (errr) => {
       console.error("Error in onAuthStateChanged", errr)
     })
@@ -31,26 +40,41 @@ const App = () => {
     return () => {
       authCh()
     }
-  }, [])
+  }, [fetchUserInfo])
+
+  console.log(currentUser)
+
+
+if(isLoding) return <div className='load'>Loding.....</div>
+
   return (
 
     <>
       
-      <div className='container  '>
+      <div className='container'>
       
       
       
-     <Routes>
+     {/* <Routes>
 
-      <Route  path={'/'} element={user ?  <UserChats/>: <Home/>  } />  
-       {/* user not loggedIn hai to UserChats per gya hai */}
-      {/* <Route path={'/'} element={<Home />} /> */}
+      <Route  path={'/'} element={currentUser ?  <UserChats/>: <Home/>  } />  
+     
       <Route path={'/signin'} element={<LoginPage />} />
       <Route  path={'/signup'} element={<RegisterPage />} />
       
-      {/* <Route  path='/userchats' element={<UserChats />}/> */}
+      
 
-     </Routes>
+     </Routes> */}
+
+     {currentUser ? (
+      <>
+      <List />
+      <Chat />
+      <Detail />
+      </>
+     ): (
+      <Home />
+     )}
      
      <Notification />
      </div> 

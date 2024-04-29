@@ -1,5 +1,9 @@
 import React from 'react'
+import { app } from '../../../firebase'
 import './detail.css'
+import { getAuth } from 'firebase/auth'
+const auth = getAuth(app)
+
 const Detail = () => {
   return (
     <>
@@ -68,7 +72,7 @@ const Detail = () => {
     
          <div className='flex flex-col gap-4'>
          <button className="btn btn-error">Block User</button>
-         <button className="btn btn-active btn-primary">Logout</button>
+         <button className="btn btn-active btn-primary" onClick={()=> auth.signOut()}>Logout</button>
 
          </div>
 
