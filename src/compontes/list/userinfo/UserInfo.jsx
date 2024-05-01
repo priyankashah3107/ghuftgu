@@ -11,7 +11,7 @@ const UserInfo = () => {
       <div className="user">
         <img src= { currentUser.avatar || "/avatar.png" }alt="img" />
         {/* <h2 className='text-2xl font-bold'>Priyanka</h2> */}
-        <h2 className='text-2xl font-bold'>{currentUser.name}</h2>
+        <h2 className='text-2xl font-bold'>{currentUser.username}</h2>
       </div>
 
        <div className="icons size-9 flex justify-center items-center ">

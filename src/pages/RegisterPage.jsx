@@ -12,7 +12,7 @@ const auth = getAuth(app);
 const RegisterPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
+  const [username, setUsername] = useState('');
 
   const [avatar, setAvatar] = useState({
     file: null,
@@ -33,7 +33,7 @@ const RegisterPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!name || !email || !password) {
+    if (!username || !email || !password) {
       alert('Please Fill all the feild');
       return;
     }
@@ -44,14 +44,14 @@ const RegisterPage = () => {
       //   email,
       //   password
       // );
-      const result = await firebase.createUserEmailPass(email, password, name);
+      const result = await firebase.createUserEmailPass(email, password, username);
       // const result = await createUserEmailPass(email, password);
 
       const imgUrl = await upload(avatar.file)
       console.log('Registration successful:', result);
       alert('Successfully registered!');
       await setDoc(doc(db, 'users', result.user.uid), {
-        name,
+        username,
         email,
         avatar: imgUrl,
         id: result.user.uid,
@@ -102,8 +102,8 @@ const RegisterPage = () => {
             type="text"
             placeholder="Username"
             className="input input-bordered w-full max-w-xs"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
 
           <input

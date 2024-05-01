@@ -20,7 +20,7 @@ const AddUser = () => {
           const q = query(userRef, where("username", "==", username));
           const querySnapShot =  await getDocs(q)
       
-          if(!querySnapShot) {
+          if(!querySnapShot.empty) {
             setName(querySnapShot.docs[0].data())
           } else {
             setName('')
@@ -38,7 +38,7 @@ const AddUser = () => {
 
       <form onSubmit={handleSearch}>
          <input type="text" placeholder='Search' name='username' className='text-black' 
-         value={name} onChange={(e) => setName(e.target.value)}
+         
          />
          
          <button className="btn btn-primary">Search</button>
@@ -47,8 +47,9 @@ const AddUser = () => {
       
          { name && <div className="user">
             <div className="detail">
-              <img src= "avatar.png" alt="avatar" />
-              <span className='text-xl font-bold'>Kshetez</span>
+              <img src= { name.avatar || "avatar.png"} alt="avatar" />
+              {/* <span className='text-xl font-bold'>Priyanka</span> */}
+              <span className='text-xl font-bold'>{name.username}</span>
             </div>
             <button className="btn btn-accent">Add User</button>
           </div>
