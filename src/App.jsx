@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
 import UserChats from './compontes/UserChats'
+import List from './compontes/list/List'
 import { useNavigate } from 'react-router-dom'
 import Notification from './compontes/notification/Notification'
 import { getAuth, onAuthStateChanged } from 'firebase/auth'
@@ -28,24 +29,39 @@ const App = () => {
 // stateManagement with zudstand
 const {currentUser, isLoding, fetchUserInfo} = useUserStore()
 
+  // useEffect(() => {
+  //   const authCh = onAuthStateChanged(auth, (user) => {
+
+  //     // console.log(user.uid)
+  //     fetchUserInfo(user.uid)
+  //   }, (errr) => {
+  //     console.error("Error in onAuthStateChanged", errr)
+  //   })
+
+  //   return () => {
+  //     authCh()
+  //   }
+  // }, [fetchUserInfo, currentUser, auth])
+
+
+
   useEffect(() => {
     const authCh = onAuthStateChanged(auth, (user) => {
+      if (user) { 
+        fetchUserInfo(user.uid);
+      }
+    }, (error) => {
+      console.error("Error in onAuthStateChanged", error);
+    });
 
-      // console.log(user.uid)
-      fetchUserInfo(user?.uid)
-    }, (errr) => {
-      console.error("Error in onAuthStateChanged", errr)
-    })
-
-    return () => {
-      authCh()
-    }
-  }, [fetchUserInfo])
+    return () => authCh();
+  }, [fetchUserInfo], currentUser,auth);
+  
 
   console.log(currentUser)
 
 
-if(isLoding) return <div className='load'>Loding.....</div>
+// if(isLoding) return <div className='load'>Loading.....</div>
 
   return (
 
