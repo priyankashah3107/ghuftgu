@@ -48,7 +48,7 @@ const {currentUser, isLoding, fetchUserInfo} = useUserStore()
   useEffect(() => {
     const authCh = onAuthStateChanged(auth, (user) => {
       if (user) { 
-        fetchUserInfo(user.uid);
+        fetchUserInfo(user?.uid);
       }
     }, (error) => {
       console.error("Error in onAuthStateChanged", error);
@@ -61,7 +61,7 @@ const {currentUser, isLoding, fetchUserInfo} = useUserStore()
   console.log(currentUser)
 
 
-// if(isLoding) return <div className='load'>Loading.....</div>
+// if(isLoding) return <div className='load'>Loading.....</div>    // ye line loding mei error cause kr rha tha but iss load ki trh kaam krna h baad mei fix krte hai 
 
   return (
 

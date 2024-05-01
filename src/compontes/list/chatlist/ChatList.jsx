@@ -1,9 +1,41 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './chatList.css'
 import AddUser from './adduser/AddUser'
+import { useUserStore } from '../../../../userStore'
+import { doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { db } from '../../../../firebase'
 
 const ChatList = () => {
   const [addMode, setAddMode] = useState(false)
+  const[chats, setChats] = useState([])
+
+  const {currentUser} = useUserStore()
+
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "userchats", currentUser.id),  async(res) => {
+      // console.log("Current data: ", doc.data());
+      const items = res.data().chats;
+      const promises = items.map(async (items) => {
+        const userDocRef = doc(db, "users", items.receiverId);
+        const userDocSnap = await getDoc(userDocRef)
+
+        const user = userDocSnap.data()
+
+        return {...items, user}
+      })
+
+      const chatData = await Promise.all(promises)
+      setChats(chatData.sort((a,b) => b.updatedAt - a.updatedAt))
+  });   
+   
+  return () => {
+    unSub()
+  }
+
+  }, [currentUser.id])
+
+  console.log(chats)
+
   return (
    <>
     <div className="chatList flex-1 overflow-y-auto ">
@@ -18,54 +50,20 @@ const ChatList = () => {
         onClick={() => setAddMode((prev) => !prev)} />
       </div>
 
-      <div className="item flex justify-start items-center gap-[20px] pb-2 pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
-           <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
 
-       <div className="item flex justify-start items-center pb-2 gap-[20px] pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
-           <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
+          {chats.map((chat) => (
 
-        <div className="item flex justify-start  pb-2 items-center gap-[20px] pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
+           <div className="item flex justify-start items-center gap-[20px] pb-2 pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer" key={chat.chatId}>
+           <img src="/avatar.png" alt="avatar" />
            <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
-    
-       <div className="item flex justify-start  pb-2 items-center gap-[20px] pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
-           <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
+          <span>Priyanka</span>
+          {/* <p>Hello Universe</p> */}
+          <p>{chat.lastMessage}</p>
+         </div>
+         </div>
+          ))} 
+     
 
-
-       <div className="item flex justify-start  pb-2 items-center gap-[20px] pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
-           <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
-
-       <div className="item flex justify-start  pb-2 items-center gap-[20px] pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer">
-          <img src="/avatar.png" alt="avatar" />
-           <div className="texts">
-            <span>Priyanka</span>
-            <p>Hello Universe</p>
-           </div>
-       </div>
 
        {addMode &&   <AddUser />}
     </div>
