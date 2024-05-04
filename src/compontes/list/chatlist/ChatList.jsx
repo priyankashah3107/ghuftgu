@@ -54,9 +54,9 @@ const ChatList = () => {
           {chats.map((chat) => (
 
            <div className="item flex justify-start items-center gap-[20px] pb-2 pl-6 mt-4 border-b-[2px] border-b-[#a8a8a8] cursor-pointer" key={chat.chatId}>
-           <img src="/avatar.png" alt="avatar" />
+           <img src={chat.user.avatar || "/avatar.png"} alt="avatar" className='size-[50px]' />
            <div className="texts">
-          <span>Priyanka</span>
+          <span>{chat.user.username}</span>
           {/* <p>Hello Universe</p> */}
           <p>{chat.lastMessage}</p>
          </div>
