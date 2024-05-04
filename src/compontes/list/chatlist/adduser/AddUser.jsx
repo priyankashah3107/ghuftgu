@@ -1,13 +1,17 @@
 import React, { useState } from 'react'
 import './addUser.css'
-import { collection, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
+import { arrayUnion, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from "firebase/firestore";
 import { db } from '../../../../../firebase';
+import { useUserStore } from '../../../../../userStore';
+
 const AddUser = () => {
+ 
   const [name, setName] = useState('')
   const [userData, setUserData] = useState(null)
   const [isLoading, setIsLoading] = useState(null)
   const [errorMessage, setErrorMessage] = useState(null)
 
+   const {currentUser} = useUserStore
   // console.log(name)
 
 
@@ -44,6 +48,82 @@ const AddUser = () => {
  
   }
 
+  const handleAdd = async () => {
+    const chatRef = collection(db, "chats");
+    const userChatsRef = collection(db, "userchats");
+
+    try {
+      const newChatRef = doc(chatRef);
+
+      await setDoc(newChatRef, {
+        createdAt: serverTimestamp(),
+        messages: [],
+      });
+
+     // Access the chat ID after successful creation
+     const chatId = newChatRef.id;
+
+     // Update user chats references with the chat ID
+     await updateDoc(doc(userChatsRef, userData.id), {
+       chats: arrayUnion({
+         chatId,
+         lastMessage: "",
+         receiverId: currentUser.id,
+         updatedAt: Date.now(),
+       }),
+     });
+ 
+     await updateDoc(doc(userChatsRef, currentUser.id), {
+       chats: arrayUnion({
+         chatId,
+         lastMessage: "",
+         receiverId: userData.id,
+         updatedAt: Date.now(),
+       }),
+     });
+   console.log(newChatRef.id)
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  
+
+
+
+
+
+
+
+  // const handleAddUser = async (userData) => { // Pass user data as argument
+  //   if (!userData) {
+  //     return; // Handle case where no user is found
+  //   }
+  
+  //   const chatRef = collection(db, "chats");
+  //   const userChatRef = collection(db, "userchats"); // Assuming a collection for user-chat relationships
+  
+  //   try {
+  //     const newChatRef = doc(chatRef);
+  //     await setDoc(newChatRef, {
+  //       createdAt: serverTimestamp(),
+  //       messages: [],
+  //       participants: [userData.id, /* Your current user's ID */] // Add both user IDs
+  //     });
+  
+  //     // Add the chat to user chats collections (assuming userchats collection exists)
+  //     await setDoc(doc(userChatRef, userData.id), { chatId: newChatRef.id }); // For searched user
+  //     await setDoc(doc(userChatRef, /* Your current user's ID */), { chatId: newChatRef.id }); // For your user
+  
+  //     console.log("Chat created successfully:", newChatRef.id);
+  //     // Handle success (e.g., navigate to chat view)
+  //   } catch (error) {
+  //     console.error("Error creating chat:", error);
+  //     // Display error message to user
+  //   }
+  // };
+  
+
   return (
     <>
      <div className="addUser">
@@ -65,7 +145,7 @@ const AddUser = () => {
               {/* <span className='text-xl font-bold'>Priyanka</span> */}
               <span className='text-xl font-bold'>{userData.username}</span>
             </div>
-            <button className="btn btn-accent">Add User</button>
+            <button className="btn btn-accent" onClick={handleAdd}>Add User</button>
           </div>
       )}
 
