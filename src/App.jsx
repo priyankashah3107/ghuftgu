@@ -12,6 +12,7 @@ import { app } from '../firebase'
 import { useUserStore } from '../userStore'
 import Chat from './compontes/chat/Chat'
 import Detail from './compontes/detail/Detail'
+import { useChatStore } from '../ChatStore'
 const auth = getAuth(app)
 const App = () => {
   // const user = true;
@@ -28,6 +29,7 @@ const App = () => {
 
 // stateManagement with zudstand
 const {currentUser, isLoding, fetchUserInfo} = useUserStore()
+const {chatId} = useChatStore()
 
   // useEffect(() => {
   //   const authCh = onAuthStateChanged(auth, (user) => {
@@ -85,8 +87,8 @@ const {currentUser, isLoding, fetchUserInfo} = useUserStore()
      {currentUser ? (
       <>
       <List />
-      <Chat />
-      <Detail />
+      {chatId && <Chat />}
+      {chatId && <Detail />}
       </>
      ): (
       <Home />

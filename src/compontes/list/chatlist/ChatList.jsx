@@ -11,7 +11,10 @@ const ChatList = () => {
   const[chats, setChats] = useState([])
 
   const {currentUser} = useUserStore()
-  const {changeChat} = useChatStore()
+  const {chatId, changeChat} = useChatStore()
+//  console.log(chatId)
+
+
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "userchats", currentUser.id),  async(res) => {
       // console.log("Current data: ", doc.data());
