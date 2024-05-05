@@ -1,11 +1,16 @@
 import React, { useEffect, useState, useRef } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react';
+import { doc, onSnapshot } from 'firebase/firestore';
+import { db } from '../../../firebase';
 
 const Chat = () => {
+  const[chat, setChat] = useState('')
   const[text, setText] = useState('')
   const[open , setOpen] = useState(false)
   const endRef = useRef(null); 
+
+
   useEffect(() => {
    
     if (endRef.current) {
@@ -14,6 +19,20 @@ const Chat = () => {
       console.warn("endRef.current is not yet available or is not a DOM element");
     }
   }, []);
+
+
+  useEffect(() => {
+    const unSub = onSnapshot(doc(db, "chats", "pdxhnrgRcGYHmxoLYled"), (res) => {
+       setChat(res.data())
+    })
+
+    return () => {
+      unSub();
+    }
+  }, [])
+
+  console.log(chat)
+
   const handleEmoji = (e) => {
     // console.log(e)
     setText((prev) => prev + e.emoji)

@@ -106,11 +106,11 @@ const AddUser = () => {
   
       // Access the chat ID after successful creation
       const chatId = newChatRef.id;
-      console.log("New chat ID:", chatId);
+     // console.log("New chat ID:", chatId);
   
       // Check if userData and currentUser are defined before accessing their 'id' properties
-      console.log("userData:", userData);
-      console.log("currentUser:", currentUser);
+     //  console.log("userData:", userData);
+     // console.log("currentUser:", currentUser);
   
       if (userData && userData.id && currentUser && currentUser.id) {
         // Update user chats references with the chat ID
