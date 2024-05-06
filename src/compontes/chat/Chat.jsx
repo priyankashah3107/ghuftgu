@@ -1,15 +1,18 @@
 import React, { useEffect, useState, useRef } from 'react'
 import './chat.css'
 import EmojiPicker from 'emoji-picker-react';
-import { doc, onSnapshot } from 'firebase/firestore';
+import { arrayUnion, doc, getDoc, onSnapshot, updateDoc } from 'firebase/firestore';
 import { db } from '../../../firebase';
 import { useChatStore } from '../../../ChatStore';
+import { useUserStore } from '../../../userStore';
 const Chat = () => {
   const[chat, setChat] = useState('')
   const[text, setText] = useState('')
   const[open , setOpen] = useState(false)
   const endRef = useRef(null); 
-   const {chatId} = useChatStore()
+   
+   const {currentUser} = useUserStore()
+   const {chatId, user} = useChatStore()
 
   useEffect(() => {
    
@@ -41,6 +44,49 @@ const Chat = () => {
    
   // console.log(text)
 
+
+  const handleSend = async () => {
+     if(text === '') return;
+      
+      
+     try {
+
+      await updateDoc(doc(db, "chats", chatId), {
+        messages: arrayUnion({
+          senderId: currentUser.id,
+          text,
+          createdAt: new Date(),
+        }),
+       });
+      
+       const userIds = [currentUser.id, user.id];
+
+       userIds.forEach(async (id) => {
+        const userChatsRef = doc(db, "userchats", id);
+        const userChatsSnapShot = await getDoc(userChatsRef);
+
+        if(userChatsSnapShot.exists()) {
+          const userChatsData = userChatsSnapShot.data();
+
+          const  chatIndex = userChatsData.chats.findIndex((chat) => chat.chatId === chatId);
+
+          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
+
+
+          await updateDoc(userChatsRef, {
+            chats: userChatsData.chats,
+          })
+        }
+       })
+
+      
+     } catch (error) {
+       console.log(error)
+     }
+  }
+
   return (
     <div className='chatt'>
       <div className="top">
@@ -61,47 +107,28 @@ const Chat = () => {
 
 
       <div className="center">
+  
 
-        <div className="message">
+          {/* <div className="message">
           <img src="avatar.png" alt="" />
           <div className="texts">
             <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugit hic blanditiis accusantium autem, necessitatibus reprehenderit.</p>
             <span>1 min ago</span>
           </div>
-        </div>
-
-         <div className="message our">
-          
-          <div className="texts ">
-            <p >Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugit hic blanditiis accusantium autem, necessitatibus reprehenderit.</p>
-            <span>1 min ago</span>
-          </div>
-        </div>  
-
-          <div className="message">
-          <img src="avatar.png" alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugit hic blanditiis accusantium autem, necessitatibus reprehenderit.</p>
-            <span>1 min ago</span>
-          </div>
-        </div> 
+        </div>  */}
             
-        <div className="message our">
-          
-          <div className="texts">
-          <img src="nexflix.png" alt="image" />
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugit hic blanditiis accusantium autem, necessitatibus reprehenderit.</p>
-            <span>1 min ago</span>
-          </div>
-        </div> 
+
+       {  chat?.messages?.map((message) => (
+        <div className="message our" key={message?.createAt}> 
+        <div className="texts">
+        { message.img && <img src={message.img} alt="image" />}
+          <p>{message.text}</p>
+          {/* <span>1 min ago</span> */}
+        </div>
+      </div>
+       )) }
          
-        <div className="message">
-          <img src="avatar.png" alt="" />
-          <div className="texts">
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Totam fugit hic blanditiis accusantium autem, necessitatibus reprehenderit.</p>
-            <span>1 min ago</span>
-          </div>
-        </div> 
+     
  
        
        <div ref={endRef}></div>
@@ -129,7 +156,8 @@ const Chat = () => {
            </div>
           
         </div>
-        <button className="sendButton cursor-pointer px-7 py-2 rounded-md bg-blue-400  ">Send</button>
+        <button className="sendButton cursor-pointer px-7 py-2 rounded-md bg-blue-400 hover:bg-blue-700 "
+        onClick={handleSend}>Send</button>
       </div>
     </div>
   )
