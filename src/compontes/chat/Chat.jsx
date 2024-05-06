@@ -61,25 +61,38 @@ const Chat = () => {
       
        const userIds = [currentUser.id, user.id];
 
-       userIds.forEach(async (id) => {
+      await Promise.all(userIds.map(async (id) => {
+
         const userChatsRef = doc(db, "userchats", id);
-        const userChatsSnapShot = await getDoc(userChatsRef);
+        const userChatsSnapshot = await getDoc(userChatsRef);
 
-        if(userChatsSnapShot.exists()) {
-          const userChatsData = userChatsSnapShot.data();
+        if(userChatsSnapshot.exists()) {
+          const userChatsData = userChatsSnapshot.data();
 
-          const  chatIndex = userChatsData.chats.findIndex((chat) => chat.chatId === chatId);
+          const  updatedChats = userChatsData.chats.map((chat) => {
+              if(chat.chatId === chatId) {
+                return {
+                  ...chat, 
+                  lastMessage: text,
+                  isSeen: id === currentUser.id ? true : false,
+                  updatedAt: Date.now(),
 
-          userChatsData.chats[chatIndex].lastMessage = text;
-          userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false;
-          userChatsData.chats[chatIndex].updatedAt = Date.now();
+                };
+              }
+              return chat;
+          });
+
+         
 
 
           await updateDoc(userChatsRef, {
-            chats: userChatsData.chats,
+            // chats: userChatsData.chats,
+            chats: updatedChats
           })
         }
        })
+
+      )
 
       
      } catch (error) {
