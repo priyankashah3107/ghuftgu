@@ -12,7 +12,7 @@ const Chat = () => {
   const endRef = useRef(null); 
    
    const {currentUser} = useUserStore()
-   const {chatId, user} = useChatStore()
+   const {chatId, user} = useChatStore(); 
 
   useEffect(() => {
    
@@ -59,42 +59,31 @@ const Chat = () => {
         }),
        });
       
-       const userIds = [currentUser.id, user.id];
+       const userIds = [currentUser?.id, user?.id].filter(Boolean);
 
-      await Promise.all(userIds.map(async (id) => {
+       userIds.forEach(async (id) => {
 
         const userChatsRef = doc(db, "userchats", id);
-        const userChatsSnapshot = await getDoc(userChatsRef);
+        const userChatsSnapShot = await getDoc(userChatsRef);
 
-        if(userChatsSnapshot.exists()) {
-          const userChatsData = userChatsSnapshot.data();
+        if(userChatsSnapShot.exists()) {
+          const userChatsData = userChatsSnapShot.data();
 
-          const  updatedChats = userChatsData.chats.map((chat) => {
-              if(chat.chatId === chatId) {
-                return {
-                  ...chat, 
-                  lastMessage: text,
-                  isSeen: id === currentUser.id ? true : false,
-                  updatedAt: Date.now(),
+          const  chatIndex = userChatsData.chats.findIndex(
+            (ch) => ch.chatId === chatId
+          );
 
-                };
-              }
-              return chat;
-          });
-
-         
+          userChatsData.chats[chatIndex].lastMessage = text;
+          userChatsData.chats[chatIndex].isSeen = id === currentUser.id ? true : false;
+          userChatsData.chats[chatIndex].updatedAt = Date.now();
 
 
           await updateDoc(userChatsRef, {
-            // chats: userChatsData.chats,
-            chats: updatedChats
+            chats: userChatsData.chats,
           })
         }
        })
 
-      )
-
-      
      } catch (error) {
        console.log(error)
      }
@@ -136,7 +125,7 @@ const Chat = () => {
         <div className="texts">
         { message.img && <img src={message.img} alt="image" />}
           <p>{message.text}</p>
-          {/* <span>1 min ago</span> */}
+           {/* <span>1 min ago</span>  */}
         </div>
       </div>
        )) }
